@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motel Customer Form</title>
+</head>
+<body>
+
+    <div id ="customerDescription"></div>
+
+    <script>
+
+        //this html code is used to enter the information on a browser tab then displays the results to the screen
+
+        //function to prompt for customer details and return an object
+
+        function getCustomerDetails() {
+            const customer = {
+                name: prompt("Enter customer's name:"),
+                birthDate: prompt("Enter customer's birth date (YYYY-MM-DD):"),
+                gender: prompt("Enter customer's gender:"),
+                roomPreferences: prompt("Enter room preferences (comma-separated):").split(','),
+                paymentMethod: prompt("Enter payment method:"),
+                mailingAddress: {
+                    street: prompt("Enter mailing address street:"),
+                    city: prompt("Enter mailing address city:"),
+                    province: prompt("Enter mailing address province:"),
+                    zip: prompt("Enter mailing address zip code:")
+                },
+                phoneNumber: prompt("Enter phone number:"),
+                checkInDate: prompt("Enter check-in date (YYYY-MM-DD):"),
+                checkOutDate: prompt("Enter check-out date (YYYY-MM-DD):"),
+                calculateAge: function() {
+                    const today = new Date();
+                    const birthDate = new Date(this.birthDate);
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    return age;
+                },
+                calculateStayDuration: function() {
+                    const checkInDate = new Date(this.checkInDate);
+                    const checkOutDate = new Date(this.checkOutDate);
+                    return Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                }
+            };
+            return customer;
+        }
+
+        //function to create a customer description from the object
+
+        function createCustomerDescription(customer) {
+            return `
+                Customer Name: ${customer.name}
+                Age: ${customer.calculateAge()}
+                Gender: ${customer.gender}
+                Room Preferences: ${customer.roomPreferences.join(", ")}
+                Payment Method: ${customer.paymentMethod}
+                Mailing Address: ${customer.mailingAddress.street}, ${customer.mailingAddress.city}, ${customer.mailingAddress.province} ${customer.mailingAddress.zip}
+                Phone Number: ${customer.phoneNumber}
+                Check-In Date: ${customer.checkInDate}
+                Check-Out Date: ${customer.checkOutDate}
+                Stay Duration: ${customer.calculateStayDuration()} days
+            `;
+        }
+
+        //main function to run the program
+
+        function main() {
+            const customer = getCustomerDetails();
+            const description = createCustomerDescription(customer);
+            document.getElementById('customerDescription').innerText = description;
+        }
+
+        main();
+    </script>
+</body>
+</html>
